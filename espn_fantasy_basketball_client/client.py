@@ -19,14 +19,21 @@ class Client:
     
     def get_nba_team_schedules(self, season: int) -> Dict:
         url = f"{self.base_url}/seasons/{season}"
-        params = {"view": ["proTeamSchedules_wl"]}
+        params = {"view": "proTeamSchedules_wl"}
         response = self.session.get(url=url, params=params)
         self._inspect_response(response)
         return response.json()["settings"]["proTeams"]
 
-    def get_league_history(self):
+    def get_league_history(self) -> Dict:
         url = f"{self.base_url}/leagueHistory/{self.league_id}"
-        params = {"view": ["kona_history_standings"]}
+        params = {"view": "kona_history_standings"}
+        response = self.session.get(url=url, params=params)
+        self._inspect_response(response)
+        return response.json()
+    
+    def get_nba_players(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/players"
+        params = {"view": "players_wl"}
         response = self.session.get(url=url, params=params)
         self._inspect_response(response)
         return response.json()
