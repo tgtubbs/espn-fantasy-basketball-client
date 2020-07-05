@@ -4,10 +4,11 @@ from typing import Dict
 
 class Client:
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, league_id: int):
         self.base_url = "https://fantasy.espn.com/apis/v3/games/fba"
         self.session = Session()
         self.session.authenticate(username=username, password=password)
+        self.league_id = league_id
 
     @staticmethod
     def _inspect_response(response):
