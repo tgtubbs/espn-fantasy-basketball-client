@@ -18,7 +18,7 @@ class Client:
             raise Exception(f"Request failed with status {response.status}")
     
     def get_nba_team_schedules(self, season: int) -> Dict:
-        url = f"{self.base_url}/seasons/2020"
+        url = f"{self.base_url}/seasons/{season}"
         params = {"view": ["proTeamSchedules_wl"]}
         response = self.session.get(url=url, params=params)
         self._inspect_response(response)
