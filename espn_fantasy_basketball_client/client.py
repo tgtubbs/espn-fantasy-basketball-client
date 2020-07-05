@@ -23,3 +23,10 @@ class Client:
         response = self.session.get(url=url, params=params)
         self._inspect_response(response)
         return response.json()["settings"]["proTeams"]
+
+    def get_league_history(self):
+        url = f"{self.base_url}/leagueHistory/{self.league_id}"
+        params = {"view": ["kona_history_standings"]}
+        response = self.session.get(url=url, params=params)
+        self._inspect_response(response)
+        return response.json()
