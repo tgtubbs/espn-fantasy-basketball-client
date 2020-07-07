@@ -47,3 +47,8 @@ class Client:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mStatus")
         return response.json()
+
+    def get_league_schedule(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mMatchupScore")
+        return response.json()
