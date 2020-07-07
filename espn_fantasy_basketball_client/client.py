@@ -23,19 +23,14 @@ class Client:
         self._inspect_response(response)
         return response
 
-    def get_nba_team_schedules(self, season: int) -> Dict:
+    def get_nba_team_schedules(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}"
         response = self._get(url=url, view="proTeamSchedules_wl")
         return response.json()["settings"]["proTeams"]
 
-    def get_league_history(self) -> Dict:
+    def get_league_history(self) -> List[Dict]:
         url = f"{self.base_url}/leagueHistory/{self.league_id}"
-        reponse = self._get(url=url, view="kona_history_standings")
-        return response.json()
-    
-    def get_nba_players(self, season: int) -> Dict:
-        url = f"{self.base_url}/seasons/{season}/players"
-        reponse = self._get(url=url, view="players_wl")
+        response = self._get(url=url, view="kona_history_standings")
         return response.json()
 
     def get_league_members(self, season: int) -> List[Dict]:
@@ -46,19 +41,29 @@ class Client:
     def get_league_status(self, season: int) -> Dict:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mStatus")
-        return response.json()
+        return response.json()["status"]
 
     def get_league_matchup_scores(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mMatchupScore")
         return response.json()["schedule"]
     
-    def get_league_matchup_stats(self, season: int) -> Dict:
+    def get_league_matchup_stats(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mScoreboard")
         return response.json()["schedule"]
     
-    def get_league_standings(self, season: int) -> Dict:
+    def get_league_standings(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mScoreboard")
         return response.json()["teams"]
+
+    def get_league_settings(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mSettings")
+        return response.json()["settings"]
+
+    def get_league_players(self, season: int) -> List[Dict]:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="kona_player_info")
+        return response.json()["players"]
