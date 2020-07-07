@@ -57,3 +57,8 @@ class Client:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mScoreboard")
         return response.json()["schedule"]
+    
+    def get_league_standings(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mScoreboard")
+        return response.json()["teams"]
