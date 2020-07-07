@@ -48,7 +48,12 @@ class Client:
         response = self._get(url=url, view="mStatus")
         return response.json()
 
-    def get_league_schedule(self, season: int) -> Dict:
+    def get_league_matchup_scores(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mMatchupScore")
-        return response.json()
+        return response.json()["schedule"]
+    
+    def get_league_matchup_stats(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mScoreboard")
+        return response.json()["schedule"]
