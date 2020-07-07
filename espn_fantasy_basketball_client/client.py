@@ -1,5 +1,6 @@
+import requests
 from session import Session
-from typing import Dict, List
+from typing import Dict, List, Union
 
 
 class Client:
@@ -17,29 +18,32 @@ class Client:
         else:
             raise Exception(f"Request failed with status {response.status}")
     
+    def _get(self, url: str, view: str = None) -> requests.models.Response:
+        response = self.session.get(url=url, params={"view": view})
+        self._inspect_response(response)
+        return response
+
     def get_nba_team_schedules(self, season: int) -> Dict:
         url = f"{self.base_url}/seasons/{season}"
-        params = {"view": "proTeamSchedules_wl"}
-        response = self.session.get(url=url, params=params)
-        self._inspect_response(response)
+        response = self._get(url=url, view="proTeamSchedules_wl")
         return response.json()["settings"]["proTeams"]
 
     def get_league_history(self) -> Dict:
         url = f"{self.base_url}/leagueHistory/{self.league_id}"
-        params = {"view": "kona_history_standings"}
-        response = self.session.get(url=url, params=params)
-        self._inspect_response(response)
+        reponse = self._get(url=url, view="kona_history_standings")
         return response.json()
     
     def get_nba_players(self, season: int) -> Dict:
         url = f"{self.base_url}/seasons/{season}/players"
-        params = {"view": "players_wl"}
-        response = self.session.get(url=url, params=params)
-        self._inspect_response(response)
+        reponse = self._get(url=url, view="players_wl")
         return response.json()
 
     def get_league_members(self, season: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
-        response = self.session.get(url=url)
-        self._inspect_response(response)
+        response = self._get(url=url)
         return response.json()["members"]
+
+    def get_league_status(self, season: int) -> Dict:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mStatus")
+        return response.json()
