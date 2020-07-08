@@ -1,14 +1,17 @@
+import json
 import requests
 from session import Session
 from typing import Dict, List
+import yaml
 
 
 class Client:
 
-    def __init__(self, username: str, password: str, league_id: int):
+    def __init__(self, username: str, password: str, league_id: int, season: int):
         self.base_url = "https://fantasy.espn.com/apis/v3/games/fba"
         self.league_id = league_id
         self.season = season
+        self.maps = yaml.safe_load(open("espn_fantasy_basketball_client/maps.yml"))
         self.session = Session()
         self.session.authenticate(username=username, password=password)
 
@@ -85,3 +88,10 @@ class Client:
         url = f"{self.base_url}/seasons/{self.season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="mRoster", forTeamId=team_id)
         return response.json()["teams"][0]["roster"]["entries"]
+
+    def get_players(self, status: List[str] = ["FREEAGENT", "WAIVERS", "ONTEAM"], position: List[str] = [0,1,2,3,4,5,6,7,8,9,10]) -> List[Dict]:
+        url = f"{self.base_url}/seasons/{self.season}/segments/0/leagues/{self.league_id}"
+        params = {"view": "kona_player_info"}
+        headers = {"x-fantasy-filter": json.dumps({"players": {"filterStatus": {"value": status}, "filterSlotIds": {"value": position}}})}
+        response = self._get(url=url, params=params, headers=headers)
+        return response.json()["players"]
