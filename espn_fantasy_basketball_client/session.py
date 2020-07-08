@@ -1,7 +1,6 @@
 import os
 import pickle
-import requests
-import yaml
+import requests 
 
 
 class Session(requests.Session):
