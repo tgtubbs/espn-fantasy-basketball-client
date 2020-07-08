@@ -18,8 +18,8 @@ class Client:
         else:
             raise Exception(f"Request failed with status {response.status}")
     
-    def _get(self, url: str, view: str = None) -> requests.models.Response:
-        response = self.session.get(url=url, params={"view": view})
+    def _get(self, url: str, **kwargs) -> requests.models.Response:
+        response = self.session.get(url=url, params=kwargs)
         self._inspect_response(response)
         return response
 
@@ -67,3 +67,8 @@ class Client:
         url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
         response = self._get(url=url, view="kona_player_info")
         return response.json()["players"]
+    
+    def get_team_roster(self, season: int, team_id: int) -> List[Dict]:
+        url = f"{self.base_url}/seasons/{season}/segments/0/leagues/{self.league_id}"
+        response = self._get(url=url, view="mRoster", forTeamId=team_id)
+        return response.json()["teams"][0]["roster"]["entries"]
