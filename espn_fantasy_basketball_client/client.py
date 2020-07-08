@@ -1,6 +1,6 @@
 import requests
 from session import Session
-from typing import Dict, List, Union
+from typing import Dict, List
 
 
 class Client:
