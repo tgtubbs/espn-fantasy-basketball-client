@@ -81,12 +81,14 @@ class Client:
 
     def get_team(self, team_id: int) -> Dict:
         url = f"{self.base_url}/seasons/{self.season}/segments/0/leagues/{self.league_id}"
-        response = self._get(url=url, forTeamId=team_id)
+        params = {"forTeamId": team_id}
+        response = self._get(url=url, params=params)
         return response.json()["teams"][0]
 
     def get_team_roster(self, team_id: int) -> List[Dict]:
         url = f"{self.base_url}/seasons/{self.season}/segments/0/leagues/{self.league_id}"
-        response = self._get(url=url, view="mRoster", forTeamId=team_id)
+        params = {"view": "mRoster", "forTeamId": team_id}
+        response = self._get(url=url, params=params)
         return response.json()["teams"][0]["roster"]["entries"]
 
     def get_players(self, status: List[str] = ["FREEAGENT", "WAIVERS", "ONTEAM"], position: List[str] = [0,1,2,3,4,5,6,7,8,9,10]) -> List[Dict]:
